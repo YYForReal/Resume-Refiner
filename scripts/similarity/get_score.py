@@ -103,6 +103,7 @@ def read_doc(path):
             data = {}
     return data
 
+embedding_model = "bce-embedding-base_v1"
 
 def get_score(resume_string, job_description_string):
     """

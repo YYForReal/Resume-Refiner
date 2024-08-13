@@ -12,8 +12,9 @@ logger = logging.getLogger(__name__)
 # Set the logging level
 logger.setLevel(logging.INFO)
 
+embedding_model = "bce-embedding-base_v1"
 
-cwd = find_path("Resume-Matcher")
+cwd = find_path("Resume-Refiner")
 READ_RESUME_FROM = os.path.join(cwd, "Data", "Processed", "Resumes/")
 READ_JOB_DESCRIPTION_FROM = os.path.join(cwd, "Data", "Processed", "JobDescription/")
 
@@ -39,7 +40,7 @@ def get_score(resume_string, job_description_string):
 
     documents: List[str] = [resume_string]
     client = QdrantClient(":memory:")
-    client.set_model("BAAI/bge-base-en")
+    client.set_model("bce-embedding-base_v1")
 
     client.add(
         collection_name="demo_collection",

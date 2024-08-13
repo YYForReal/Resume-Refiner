@@ -38,14 +38,19 @@ Datawhale AI 夏令营 第四期 浪潮信息源大模型应用开发——AI简
 
 按照以下步骤设置环境并运行应用程序。
 
-1. 克隆仓库。顺带拉一个embedding模型。
+1. 克隆仓库。。
 
-   ```bash
-   git clone git@github.com:YYForReal/ResumeRefiner.git
-   cd Resume-Matcher
+```bash
+git clone git@github.com:YYForReal/ResumeRefiner.git
+cd Resume-Matcher
 
-   git clone https://www.modelscope.cn/maidalun/bce-embedding-base_v1.git
-   ```
+```
+顺带拉一个embedding模型 去替换原仓库的 BAAI/bge-base-en Done
+```bash
+git clone https://www.modelscope.cn/maidalun/bce-embedding-base_v1.git
+# git clone https://www.modelscope.cn/AI-ModelScope/bge-base-zh-v1.5.git
+```
+
 
 2. 激活虚拟环境。
 
@@ -92,21 +97,11 @@ Datawhale AI 夏令营 第四期 浪潮信息源大模型应用开发——AI简
 <br/>
 
 
-## 代码格式化
-
-本项目使用 [Black](https://black.readthedocs.io/en/stable/) 进行代码格式化。我们认为这有助于保持代码库的一致性，并减少阅读代码时的认知负担。
-
-在提交拉取请求之前，请确保你的更改符合 Black 风格指南。你可以通过在终端运行以下命令来格式化你的代码：
-
-```sh
-black .
-```
-
 #### 技术栈
 
 - Python 
-- Streamlit 
-- FastEmbedd 
-- More...
+   - Streamlit 
+   - FastEmbedd 
+   - More...
 
 <br/>
