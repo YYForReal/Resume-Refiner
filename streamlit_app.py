@@ -16,9 +16,9 @@ from scripts.similarity.get_score import *
 from scripts.utils import get_filenames_from_dir
 from scripts.utils.logger import init_logging_config
 
-# Set page configuration
+# 设置页面配置
 st.set_page_config(
-    page_title="Resume Matcher",
+    page_title="ResumeRefiner",
     page_icon="Assets/img/favicon.ico",
     initial_sidebar_state="auto",
 )
@@ -38,22 +38,22 @@ parameters.PADDING = "0.5 0.25rem"
 
 
 def create_star_graph(nodes_and_weights, title):
-    # Create an empty graph
+    # 创建一个空图
     G = nx.Graph()
 
-    # Add the central node
+    # 添加中心节点
     central_node = "resume"
     G.add_node(central_node)
 
-    # Add nodes and edges with weights to the graph
+    # 向图中添加节点和边及权重
     for node, weight in nodes_and_weights:
         G.add_node(node)
         G.add_edge(central_node, node, weight=weight * 100)
 
-    # Get position layout for nodes
+    # 获取节点的布局位置
     pos = nx.spring_layout(G)
 
-    # Create edge trace
+    # 创建边的轨迹
     edge_x = []
     edge_y = []
     for edge in G.edges():
@@ -70,7 +70,7 @@ def create_star_graph(nodes_and_weights, title):
         mode="lines",
     )
 
-    # Create node trace
+    # 创建节点的轨迹
     node_x = []
     node_y = []
     for node in G.nodes():
@@ -91,7 +91,7 @@ def create_star_graph(nodes_and_weights, title):
             size=10,
             colorbar=dict(
                 thickness=15,
-                title="Node Connections",
+                title="节点连接数",
                 xanchor="left",
                 titleside="right",
             ),
@@ -99,18 +99,18 @@ def create_star_graph(nodes_and_weights, title):
         ),
     )
 
-    # Color node points by number of connections
+    # 按连接数给节点着色
     node_adjacencies = []
     node_text = []
     for node in G.nodes():
-        adjacencies = list(G.adj[node])  # changes here
+        adjacencies = list(G.adj[node])
         node_adjacencies.append(len(adjacencies))
-        node_text.append(f"{node}<br># of connections: {len(adjacencies)}")
+        node_text.append(f"{node}<br># 连接数: {len(adjacencies)}")
 
     node_trace.marker.color = node_adjacencies
     node_trace.text = node_text
 
-    # Create the figure
+    # 创建图形
     fig = go.Figure(
         data=[edge_trace, node_trace],
         layout=go.Layout(
@@ -124,29 +124,29 @@ def create_star_graph(nodes_and_weights, title):
         ),
     )
 
-    # Show the figure
+    # 显示图形
     st.plotly_chart(fig)
 
 
 def create_annotated_text(
     input_string: str, word_list: List[str], annotation: str, color_code: str
 ):
-    # Tokenize the input string
+    # 对输入字符串进行分词
     tokens = nltk.word_tokenize(input_string)
 
-    # Convert the list to a set for quick lookups
+    # 将列表转换为集合以便快速查找
     word_set = set(word_list)
 
-    # Initialize an empty list to hold the annotated text
+    # 初始化一个空列表来保存注释文本
     annotated_text = []
 
     for token in tokens:
-        # Check if the token is in the set
+        # 检查 token 是否在集合中
         if token in word_set:
-            # If it is, append a tuple with the token, annotation, and color code
+            # 如果在，添加包含 token、注释和颜色代码的元组
             annotated_text.append((token, annotation, color_code))
         else:
-            # If it's not, just append the token as a string
+            # 如果不在，直接添加 token
             annotated_text.append(token)
 
     return annotated_text
@@ -163,26 +163,26 @@ def tokenize_string(input_string):
     return tokens
 
 
-# Display the main title and subheaders
-st.title(":blue[Resume Matcher]")
+# 显示主标题和子标题
+st.title("简历优化助手")
 with st.sidebar:
     st.image("Assets/img/header_image.png")
     st.subheader(
-        "Free and Open Source ATS to help your resume pass the screening stage."
+        "Datawhale AI 夏令营 第四期 浪潮信息源大模型应用开发——AI简历助手"
     )
     st.markdown(
-        "Check the website [www.resumematcher.fyi](https://www.resumematcher.fyi/)"
+        "访问网站 [www.resumematcher.fyi](https://www.resumematcher.fyi/)"
     )
 
     st.markdown(
-        "Give Resume Matcher a ⭐ on [GitHub](https://github.com/srbhr/resume-matcher)"
+        "在 [GitHub](https://github.com/srbhr/resume-matcher) 给 Resume Matcher 点个 ⭐"
     )
 
     badge(type="github", name="srbhr/Resume-Matcher")
-    st.markdown("For updates follow me on Twitter.")
+    st.markdown("关注我以获取最新动态。")
     badge(type="twitter", name="_srbhr_")
     st.markdown(
-        "If you like the project and would like to further help in development please consider 👇"
+        "如果您喜欢这个项目并希望进一步支持开发，请考虑 👇"
     )
     badge(type="buymeacoffee", name="srbhr")
 
@@ -193,28 +193,28 @@ resume_names = get_filenames_from_dir("Data/Processed/Resumes")
 
 
 st.markdown(
-    f"##### There are {len(resume_names)} resumes present. Please select one from the menu below:"
+    f"##### 共有 {len(resume_names)} 份简历。请选择以下菜单中的一份："
 )
 output = st.selectbox(f"", resume_names)
 
 
 avs.add_vertical_space(5)
 
-# st.write("You have selected ", output, " printing the resume")
+# st.write("你选择了 ", output, " 打印简历")
 selected_file = read_json("Data/Processed/Resumes/" + output)
 
 avs.add_vertical_space(2)
-st.markdown("#### Parsed Resume Data")
+st.markdown("#### 解析后的简历数据")
 st.caption(
-    "This text is parsed from your resume. This is how it'll look like after getting parsed by an ATS."
+    "这段文本是从你的简历中解析出来的。这是被 ATS 解析后的样子。"
 )
-st.caption("Utilize this to understand how to make your resume ATS friendly.")
+st.caption("利用这个信息了解如何使你的简历更适合 ATS。")
 avs.add_vertical_space(3)
 # st.json(selected_file)
 st.write(selected_file["clean_data"])
 
 avs.add_vertical_space(3)
-st.write("Now let's take a look at the extracted keywords from the resume.")
+st.write("现在让我们看看从简历中提取的关键词。")
 
 annotated_text(
     create_annotated_text(
@@ -226,14 +226,14 @@ annotated_text(
 )
 
 avs.add_vertical_space(5)
-st.write("Now let's take a look at the extracted entities from the resume.")
+st.write("现在让我们看看从简历中提取的实体。")
 
-# Call the function with your data
-create_star_graph(selected_file["keyterms"], "Entities from Resume")
+# 调用函数并传入数据
+create_star_graph(selected_file["keyterms"], "简历中的实体")
 
-df2 = pd.DataFrame(selected_file["keyterms"], columns=["keyword", "value"])
+df2 = pd.DataFrame(selected_file["keyterms"], columns=["关键词", "值"])
 
-# Create the dictionary
+# 创建字典
 keyword_dict = {}
 for keyword, value in selected_file["keyterms"]:
     keyword_dict[keyword] = value * 100
@@ -242,7 +242,7 @@ fig = go.Figure(
     data=[
         go.Table(
             header=dict(
-                values=["Keyword", "Value"], font=dict(size=12), fill_color="#070A52"
+                values=["关键词", "值"], font=dict(size=12), fill_color="#070A52"
             ),
             cells=dict(
                 values=[list(keyword_dict.keys()), list(keyword_dict.values())],
@@ -258,10 +258,10 @@ st.divider()
 
 fig = px.treemap(
     df2,
-    path=["keyword"],
-    values="value",
+    path=["关键词"],
+    values="值",
     color_continuous_scale="Rainbow",
-    title="Key Terms/Topics Extracted from your Resume",
+    title="从简历中提取的关键词/主题",
 )
 st.write(fig)
 
@@ -271,7 +271,7 @@ job_descriptions = get_filenames_from_dir("Data/Processed/JobDescription")
 
 
 st.markdown(
-    f"##### There are {len(job_descriptions)} job descriptions present. Please select one from the menu below:"
+    f"##### 共有 {len(job_descriptions)} 份职位描述。请选择以下菜单中的一份："
 )
 output = st.selectbox("", job_descriptions)
 
@@ -281,15 +281,15 @@ avs.add_vertical_space(5)
 selected_jd = read_json("Data/Processed/JobDescription/" + output)
 
 avs.add_vertical_space(2)
-st.markdown("#### Job Description")
+st.markdown("#### 职位描述")
 st.caption(
-    "Currently in the pipeline I'm parsing this from PDF but it'll be from txt or copy paste."
+    "目前我正在从 PDF 中解析它，但未来会从 txt 或直接粘贴。"
 )
 avs.add_vertical_space(3)
 # st.json(selected_file)
 st.write(selected_jd["clean_data"])
 
-st.markdown("#### Common Words between Job Description and Resumes Highlighted.")
+st.markdown("#### 职位描述和简历中的常见词汇已被高亮显示。")
 
 annotated_text(
     create_annotated_text(
@@ -297,14 +297,14 @@ annotated_text(
     )
 )
 
-st.write("Now let's take a look at the extracted entities from the job description.")
+st.write("现在让我们看看从职位描述中提取的实体。")
 
-# Call the function with your data
-create_star_graph(selected_jd["keyterms"], "Entities from Job Description")
+# 调用函数并传入数据
+create_star_graph(selected_jd["keyterms"], "职位描述中的实体")
 
-df2 = pd.DataFrame(selected_jd["keyterms"], columns=["keyword", "value"])
+df2 = pd.DataFrame(selected_jd["keyterms"], columns=["关键词", "值"])
 
-# Create the dictionary
+# 创建字典
 keyword_dict = {}
 for keyword, value in selected_jd["keyterms"]:
     keyword_dict[keyword] = value * 100
@@ -313,7 +313,7 @@ fig = go.Figure(
     data=[
         go.Table(
             header=dict(
-                values=["Keyword", "Value"], font=dict(size=12), fill_color="#070A52"
+                values=["关键词", "值"], font=dict(size=12), fill_color="#070A52"
             ),
             cells=dict(
                 values=[list(keyword_dict.keys()), list(keyword_dict.values())],
@@ -329,10 +329,10 @@ st.divider()
 
 fig = px.treemap(
     df2,
-    path=["keyword"],
-    values="value",
+    path=["关键词"],
+    values="值",
     color_continuous_scale="Rainbow",
-    title="Key Terms/Topics Extracted from the selected Job Description",
+    title="从选定的职位描述中提取的关键词/主题",
 )
 st.write(fig)
 
@@ -348,10 +348,10 @@ if similarity_score < 60:
 elif 60 <= similarity_score < 75:
     score_color = "orange"
 st.markdown(
-    f"Similarity Score obtained for the resume and job description is "
+    f"简历与职位描述的相似度评分为 "
     f'<span style="color:{score_color};font-size:24px; font-weight:Bold">{similarity_score}</span>',
     unsafe_allow_html=True,
 )
 
-# Go back to top
-st.markdown("[:arrow_up: Back to Top](#resume-matcher)")
+# 返回顶部
+st.markdown("[:arrow_up: 返回顶部](#简历优化助手)")

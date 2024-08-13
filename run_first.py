@@ -10,6 +10,15 @@ init_logging_config()
 PROCESSED_RESUMES_PATH = "Data/Processed/Resumes"
 PROCESSED_JOB_DESCRIPTIONS_PATH = "Data/Processed/JobDescription"
 
+# 如果不存在，则创建文件夹
+if not os.path.exists(PROCESSED_RESUMES_PATH):
+    os.makedirs(PROCESSED_RESUMES_PATH)
+
+if not os.path.exists(PROCESSED_JOB_DESCRIPTIONS_PATH):
+    os.makedirs(PROCESSED_JOB_DESCRIPTIONS_PATH)
+
+
+
 
 def read_json(filename):
     with open(filename) as f:
@@ -36,7 +45,7 @@ try:
     # Check if there are resumes present or not.
     # If present then parse it.
     remove_old_files(PROCESSED_RESUMES_PATH)
-
+    logging.info("=== next ===")
     file_names = get_filenames_from_dir("Data/Resumes")
     logging.info("Reading from Data/Resumes is now complete.")
 except:
