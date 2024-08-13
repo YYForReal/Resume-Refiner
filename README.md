@@ -1,7 +1,3 @@
-# 
-
-
-
 <div align="center">
 
 # ResumeRefiner
@@ -42,18 +38,16 @@ Datawhale AI 夏令营 第四期 浪潮信息源大模型应用开发——AI简
 
 按照以下步骤设置环境并运行应用程序。
 
-1. 在 [此处](https://github.com/srbhr/Resume-Matcher/fork) 分叉仓库。
-
-2. 克隆分叉的仓库。
+1. 克隆仓库。顺带拉一个embedding模型。
 
    ```bash
-   git clone https://github.com/<YOUR-USERNAME>/Resume-Matcher.git
+   git clone git@github.com:YYForReal/ResumeRefiner.git
    cd Resume-Matcher
 
    git clone https://www.modelscope.cn/maidalun/bce-embedding-base_v1.git
    ```
 
-4. 激活虚拟环境。
+2. 激活虚拟环境。
 
    ```bash
    conda create -n resume_refiner python==3.11
@@ -110,39 +104,9 @@ black .
 
 #### 技术栈
 
-![Python](https://img.shields.io/badge/Python-FFD43B?style=flat-square&logo=python&logoColor=blue) ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=flat-square&logo=tailwind-css&logoColor=white) ![Next JS](https://img.shields.io/badge/Next-black?style=flat-square&logo=next.js&logoColor=white) ![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=flat-square&logo=fastapi) ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat-square&logo=typescript&logoColor=white) ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=white) ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=flat-square&logo=css3&logoColor=white) ![& More](https://custom-icon-badges.demolab.com/badge/And_More-white?style=flat-square&logo=plus&logoColor=black)
+- Python 
+- Streamlit 
+- FastEmbedd 
+- More...
 
 <br/>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-============
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

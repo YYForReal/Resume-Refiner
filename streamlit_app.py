@@ -170,188 +170,231 @@ with st.sidebar:
     st.subheader(
         "Datawhale AI 夏令营 第四期 浪潮信息源大模型应用开发——AI简历助手"
     )
-    st.markdown(
-        "访问网站 [www.resumematcher.fyi](https://www.resumematcher.fyi/)"
-    )
 
     st.markdown(
-        "在 [GitHub](https://github.com/srbhr/resume-matcher) 给 Resume Matcher 点个 ⭐"
+        "基于 [Resume Matcher](https://github.com/srbhr/resume-matcher) 项目迭代开发"
     )
 
-    badge(type="github", name="srbhr/Resume-Matcher")
-    st.markdown("关注我以获取最新动态。")
-    badge(type="twitter", name="_srbhr_")
-    st.markdown(
-        "如果您喜欢这个项目并希望进一步支持开发，请考虑 👇"
+    st.html(
+        "<h1 align='center'><a style='text-decoration: none;' href='https://github.com/YYForReal/ResumeRefiner'>ResumeRefiner⭐</a></h1>"
     )
-    badge(type="buymeacoffee", name="srbhr")
+
+    st.markdown("当前项目地址👇")
+    badge(type="github", name="YYForReal/ResumeRefiner")
+
+    st.markdown(
+        "队伍: AI学习小分队"
+    )
+
+
+    # st.markdown(
+    #     "如果您喜欢这个项目并希望进一步支持开发，请考虑 👇"
+    # )
 
 st.divider()
 avs.add_vertical_space(1)
 
-resume_names = get_filenames_from_dir("Data/Processed/Resumes")
+# change 
+# resume_names = get_filenames_from_dir("Data/Processed/Resumes")
+# st.markdown(
+#     f"##### 共有 {len(resume_names)} 份简历。请选择以下菜单中的一份："
+# )
+# output = st.selectbox(f"", resume_names)
+# avs.add_vertical_space(5)
+# # st.write("你选择了 ", output, " 打印简历")
+# selected_file = read_json("Data/Processed/Resumes/" + output)
 
+selected_file = None
 
-st.markdown(
-    f"##### 共有 {len(resume_names)} 份简历。请选择以下菜单中的一份："
-)
-output = st.selectbox(f"", resume_names)
-
-
-avs.add_vertical_space(5)
-
-# st.write("你选择了 ", output, " 打印简历")
-selected_file = read_json("Data/Processed/Resumes/" + output)
-
-avs.add_vertical_space(2)
-st.markdown("#### 解析后的简历数据")
-st.caption(
-    "这段文本是从你的简历中解析出来的。这是被 ATS 解析后的样子。"
-)
-st.caption("利用这个信息了解如何使你的简历更适合 ATS。")
-avs.add_vertical_space(3)
-# st.json(selected_file)
-st.write(selected_file["clean_data"])
-
-avs.add_vertical_space(3)
-st.write("现在让我们看看从简历中提取的关键词。")
-
-annotated_text(
-    create_annotated_text(
-        selected_file["clean_data"],
-        selected_file["extracted_keywords"],
-        "KW",
-        "#0B666A",
+# 检查 "Data/Processed/Resumes" 文件夹是否为空
+if not os.listdir("Data/Processed/Resumes"):
+    st.write("文件夹为空，请上传文件。")
+    # 使用 Streamlit 的 file_uploader 组件让用户上传文件
+    uploaded_file = st.file_uploader("选择一个文件上传", type="json")
+    if uploaded_file:
+        # 如果用户上传了文件，则读取并处理文件
+        selected_file = read_json(uploaded_file.name)
+else:
+    # 如果文件夹不为空，则直接获取文件名列表
+    resume_names = get_filenames_from_dir("Data/Processed/Resumes")
+    
+    # 显示简历数量和选择菜单
+    st.markdown(
+        f"##### 共有 {len(resume_names)} 份简历。请选择以下菜单中的一份："
     )
-)
-
-avs.add_vertical_space(5)
-st.write("现在让我们看看从简历中提取的实体。")
-
-# 调用函数并传入数据
-create_star_graph(selected_file["keyterms"], "简历中的实体")
-
-df2 = pd.DataFrame(selected_file["keyterms"], columns=["关键词", "值"])
-
-# 创建字典
-keyword_dict = {}
-for keyword, value in selected_file["keyterms"]:
-    keyword_dict[keyword] = value * 100
-
-fig = go.Figure(
-    data=[
-        go.Table(
-            header=dict(
-                values=["关键词", "值"], font=dict(size=12), fill_color="#070A52"
-            ),
-            cells=dict(
-                values=[list(keyword_dict.keys()), list(keyword_dict.values())],
-                line_color="darkslategray",
-                fill_color="#6DA9E4",
-            ),
-        )
-    ]
-)
-st.plotly_chart(fig)
-
-st.divider()
-
-fig = px.treemap(
-    df2,
-    path=["关键词"],
-    values="值",
-    color_continuous_scale="Rainbow",
-    title="从简历中提取的关键词/主题",
-)
-st.write(fig)
-
-avs.add_vertical_space(5)
-
-job_descriptions = get_filenames_from_dir("Data/Processed/JobDescription")
+    output = st.selectbox(f"", resume_names)
+    
+    # 添加垂直空间
+    avs.add_vertical_space(5)
+    
+    # 读取用户选择的简历文件
+    selected_file = read_json("Data/Processed/Resumes/" + output)
 
 
-st.markdown(
-    f"##### 共有 {len(job_descriptions)} 份职位描述。请选择以下菜单中的一份："
-)
-output = st.selectbox("", job_descriptions)
 
 
-avs.add_vertical_space(5)
+# 新的一块 ==============================
 
-selected_jd = read_json("Data/Processed/JobDescription/" + output)
 
-avs.add_vertical_space(2)
-st.markdown("#### 职位描述")
-st.caption(
-    "目前我正在从 PDF 中解析它，但未来会从 txt 或直接粘贴。"
-)
-avs.add_vertical_space(3)
-# st.json(selected_file)
-st.write(selected_jd["clean_data"])
 
-st.markdown("#### 职位描述和简历中的常见词汇已被高亮显示。")
 
-annotated_text(
-    create_annotated_text(
-        selected_file["clean_data"], selected_jd["extracted_keywords"], "JD", "#F24C3D"
+def continue_analysis():
+
+
+
+    avs.add_vertical_space(2)
+    st.markdown("#### 解析后的简历数据")
+    st.caption(
+        "这段文本是从你的简历中解析出来的。这是被 ATS 解析后的样子。"
     )
-)
+    st.caption("利用这个信息了解如何使你的简历更适合 ATS。")
+    avs.add_vertical_space(3)
+    # st.json(selected_file)
+    st.write(selected_file["clean_data"])
 
-st.write("现在让我们看看从职位描述中提取的实体。")
+    avs.add_vertical_space(3)
+    st.write("现在让我们看看从简历中提取的关键词。")
 
-# 调用函数并传入数据
-create_star_graph(selected_jd["keyterms"], "职位描述中的实体")
-
-df2 = pd.DataFrame(selected_jd["keyterms"], columns=["关键词", "值"])
-
-# 创建字典
-keyword_dict = {}
-for keyword, value in selected_jd["keyterms"]:
-    keyword_dict[keyword] = value * 100
-
-fig = go.Figure(
-    data=[
-        go.Table(
-            header=dict(
-                values=["关键词", "值"], font=dict(size=12), fill_color="#070A52"
-            ),
-            cells=dict(
-                values=[list(keyword_dict.keys()), list(keyword_dict.values())],
-                line_color="darkslategray",
-                fill_color="#6DA9E4",
-            ),
+    annotated_text(
+        create_annotated_text(
+            selected_file["clean_data"],
+            selected_file["extracted_keywords"],
+            "KW",
+            "#0B666A",
         )
-    ]
-)
-st.plotly_chart(fig)
+    )
 
-st.divider()
+    avs.add_vertical_space(5)
+    st.write("现在让我们看看从简历中提取的实体。")
 
-fig = px.treemap(
-    df2,
-    path=["关键词"],
-    values="值",
-    color_continuous_scale="Rainbow",
-    title="从选定的职位描述中提取的关键词/主题",
-)
-st.write(fig)
+    # 调用函数并传入数据
+    create_star_graph(selected_file["keyterms"], "简历中的实体")
 
-avs.add_vertical_space(3)
+    df2 = pd.DataFrame(selected_file["keyterms"], columns=["关键词", "值"])
 
-resume_string = " ".join(selected_file["extracted_keywords"])
-jd_string = " ".join(selected_jd["extracted_keywords"])
-result = get_score(resume_string, jd_string)
-similarity_score = round(result[0].score * 100, 2)
-score_color = "green"
-if similarity_score < 60:
-    score_color = "red"
-elif 60 <= similarity_score < 75:
-    score_color = "orange"
-st.markdown(
-    f"简历与职位描述的相似度评分为 "
-    f'<span style="color:{score_color};font-size:24px; font-weight:Bold">{similarity_score}</span>',
-    unsafe_allow_html=True,
-)
+    # 创建字典
+    keyword_dict = {}
+    for keyword, value in selected_file["keyterms"]:
+        keyword_dict[keyword] = value * 100
 
-# 返回顶部
-st.markdown("[:arrow_up: 返回顶部](#简历优化助手)")
+    fig = go.Figure(
+        data=[
+            go.Table(
+                header=dict(
+                    values=["关键词", "值"], font=dict(size=12), fill_color="#070A52"
+                ),
+                cells=dict(
+                    values=[list(keyword_dict.keys()), list(keyword_dict.values())],
+                    line_color="darkslategray",
+                    fill_color="#6DA9E4",
+                ),
+            )
+        ]
+    )
+    st.plotly_chart(fig)
+
+    st.divider()
+
+    fig = px.treemap(
+        df2,
+        path=["关键词"],
+        values="值",
+        color_continuous_scale="Rainbow",
+        title="从简历中提取的关键词/主题",
+    )
+    st.write(fig)
+
+    avs.add_vertical_space(5)
+
+    job_descriptions = get_filenames_from_dir("Data/Processed/JobDescription")
+
+
+    st.markdown(
+        f"##### 共有 {len(job_descriptions)} 份职位描述。请选择以下菜单中的一份："
+    )
+    output = st.selectbox("", job_descriptions)
+
+
+    avs.add_vertical_space(5)
+
+    selected_jd = read_json("Data/Processed/JobDescription/" + output)
+
+    avs.add_vertical_space(2)
+    st.markdown("#### 职位描述")
+    st.caption(
+        "目前我正在从 PDF 中解析它，但未来会从 txt 或直接粘贴。"
+    )
+    avs.add_vertical_space(3)
+    # st.json(selected_file)
+    st.write(selected_jd["clean_data"])
+
+    st.markdown("#### 职位描述和简历中的常见词汇已被高亮显示。")
+
+    annotated_text(
+        create_annotated_text(
+            selected_file["clean_data"], selected_jd["extracted_keywords"], "JD", "#F24C3D"
+        )
+    )
+
+    st.write("现在让我们看看从职位描述中提取的实体。")
+
+    # 调用函数并传入数据
+    create_star_graph(selected_jd["keyterms"], "职位描述中的实体")
+
+    df2 = pd.DataFrame(selected_jd["keyterms"], columns=["关键词", "值"])
+
+    # 创建字典
+    keyword_dict = {}
+    for keyword, value in selected_jd["keyterms"]:
+        keyword_dict[keyword] = value * 100
+
+    fig = go.Figure(
+        data=[
+            go.Table(
+                header=dict(
+                    values=["关键词", "值"], font=dict(size=12), fill_color="#070A52"
+                ),
+                cells=dict(
+                    values=[list(keyword_dict.keys()), list(keyword_dict.values())],
+                    line_color="darkslategray",
+                    fill_color="#6DA9E4",
+                ),
+            )
+        ]
+    )
+    st.plotly_chart(fig)
+
+    st.divider()
+
+    fig = px.treemap(
+        df2,
+        path=["关键词"],
+        values="值",
+        color_continuous_scale="Rainbow",
+        title="从选定的职位描述中提取的关键词/主题",
+    )
+    st.write(fig)
+
+    avs.add_vertical_space(3)
+
+    resume_string = " ".join(selected_file["extracted_keywords"])
+    jd_string = " ".join(selected_jd["extracted_keywords"])
+    result = get_score(resume_string, jd_string)
+    similarity_score = round(result[0].score * 100, 2)
+    score_color = "green"
+    if similarity_score < 60:
+        score_color = "red"
+    elif 60 <= similarity_score < 75:
+        score_color = "orange"
+    st.markdown(
+        f"简历与职位描述的相似度评分为 "
+        f'<span style="color:{score_color};font-size:24px; font-weight:Bold">{similarity_score}</span>',
+        unsafe_allow_html=True,
+    )
+
+    # 返回顶部
+    st.markdown("[:arrow_up: 返回顶部](#简历优化助手)")
+
+
+if selected_file:
+    continue_analysis()
