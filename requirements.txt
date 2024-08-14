@@ -94,8 +94,6 @@ qdrant-client==1.8.2
 
 plotly
 fastembed
-# st-annotated-text  这个要靠下面的单独装
-
 
 # pip install streamlit -i https://pypi.mirrors.ustc.edu.cn/simple
 # pip install st-annotated-text -i https://pypi.mirrors.ustc.edu.cn/simple

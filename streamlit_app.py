@@ -15,6 +15,7 @@ from streamlit_extras.badges import badge
 from scripts.similarity.get_score import *
 from scripts.utils import get_filenames_from_dir
 from scripts.utils.logger import init_logging_config
+from scripts.frontend.sidebar import show_header, show_sidebar
 
 # 设置页面配置
 st.set_page_config(
@@ -23,8 +24,17 @@ st.set_page_config(
     initial_sidebar_state="auto",
 )
 
+show_header()
+show_sidebar()
+print("show_sidebar load over")
+
+st.divider()
+avs.add_vertical_space(1)
+
+
+
 init_logging_config()
-cwd = find_path("Resume-Matcher")
+cwd = find_path("Resume-Refiner")
 config_path = os.path.join(cwd, "scripts", "similarity")
 
 try:
@@ -163,36 +173,7 @@ def tokenize_string(input_string):
     return tokens
 
 
-# 显示主标题和子标题
-st.title("简历优化助手")
-with st.sidebar:
-    st.image("Assets/img/header_image.png")
-    st.subheader(
-        "Datawhale AI 夏令营 第四期 浪潮信息源大模型应用开发——AI简历助手"
-    )
 
-    st.markdown(
-        "基于 [Resume Matcher](https://github.com/srbhr/resume-matcher) 项目迭代开发"
-    )
-
-    st.html(
-        "<h1 align='center'><a style='text-decoration: none;' href='https://github.com/YYForReal/ResumeRefiner'>ResumeRefiner⭐</a></h1>"
-    )
-
-    st.markdown("当前项目地址👇")
-    badge(type="github", name="YYForReal/ResumeRefiner")
-
-    st.markdown(
-        "队伍: AI学习小分队"
-    )
-
-
-    # st.markdown(
-    #     "如果您喜欢这个项目并希望进一步支持开发，请考虑 👇"
-    # )
-
-st.divider()
-avs.add_vertical_space(1)
 
 # change 
 # resume_names = get_filenames_from_dir("Data/Processed/Resumes")

@@ -12,10 +12,11 @@ from streamlit_extras import add_vertical_space as avs
 from streamlit_extras.badges import badge
 
 from scripts.utils import get_filenames_from_dir
+from scripts.frontend.sidebar import show_header, show_sidebar
 
 # Set page configuration
 st.set_page_config(
-    page_title="Resume Matcher",
+    page_title="ResumeRefiner",
     page_icon="Assets/img/favicon.ico",
     initial_sidebar_state="auto",
 )
@@ -25,6 +26,11 @@ nltk.download("punkt")
 parameters.SHOW_LABEL_SEPARATOR = False
 parameters.BORDER_RADIUS = 3
 parameters.PADDING = "0.5 0.25rem"
+
+
+show_header()
+show_sidebar()
+print("show_sidebar over")
 
 
 def create_star_graph(nodes_and_weights, title):
@@ -153,28 +159,32 @@ def tokenize_string(input_string):
     return tokens
 
 
+
+
 # Display the main title and subheaders
-st.title(":blue[Resume Matcher]")
-with st.sidebar:
-    st.image("Assets/img/header_image.png")
-    st.subheader(
-        "Free and Open Source ATS to help your resume pass the screening stage."
-    )
-    st.markdown(
-        "Check the website [www.resumematcher.fyi](https://www.resumematcher.fyi/)"
-    )
+# st.title(":blue[Resume Matcher]")
+# with st.sidebar:
+#     st.image("Assets/img/header_image.png")
+#     st.subheader(
+#         "Free and Open Source ATS to help your resume pass the screening stage."
+#     )
+#     st.markdown(
+#         "Check the website [www.resumematcher.fyi](https://www.resumematcher.fyi/)"
+#     )
 
-    st.markdown(
-        "Give Resume Matcher a ⭐ on [GitHub](https://github.com/srbhr/resume-matcher)"
-    )
+#     st.markdown(
+#         "Give Resume Matcher a ⭐ on [GitHub](https://github.com/srbhr/resume-matcher)"
+#     )
 
-    badge(type="github", name="srbhr/Resume-Matcher")
-    st.markdown("For updates follow me on Twitter.")
-    badge(type="twitter", name="_srbhr_")
-    st.markdown(
-        "If you like the project and would like to further help in development please consider 👇"
-    )
-    badge(type="buymeacoffee", name="srbhr")
+#     badge(type="github", name="srbhr/Resume-Matcher")
+#     st.markdown("For updates follow me on Twitter.")
+#     badge(type="twitter", name="_srbhr_")
+#     st.markdown(
+#         "If you like the project and would like to further help in development please consider 👇"
+#     )
+#     badge(type="buymeacoffee", name="srbhr")
+
+
 
 st.divider()
 avs.add_vertical_space(1)

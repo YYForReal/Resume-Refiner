@@ -43,9 +43,15 @@ Datawhale AI 夏令营 第四期 浪潮信息源大模型应用开发——AI简
    ```bash
    git clone git@github.com:YYForReal/ResumeRefiner.git
    cd Resume-Matcher
-
-   git clone https://www.modelscope.cn/maidalun/bce-embedding-base_v1.git
    ```
+
+拉一个emebdding模型
+```
+cd models
+git clone https://www.modelscope.cn/maidalun/bce-embedding-base_v1.git
+cd ..
+```
+   
 
 2. 激活虚拟环境。
 
@@ -58,6 +64,37 @@ Datawhale AI 夏令营 第四期 浪潮信息源大模型应用开发——AI简
    ```bash
    pip install -r requirements.txt
    ```
+
+```
+pip install streamlit -i https://pypi.mirrors.ustc.edu.cn/simple
+pip install st-annotated-text -i https://pypi.mirrors.ustc.edu.cn/simple
+pip install streamlit-camera-input-live -i https://pypi.mirrors.ustc.edu.cn/simple
+pip install streamlit-card -i https://pypi.mirrors.ustc.edu.cn/simple
+pip install streamlit-embedcode -i https://pypi.mirrors.ustc.edu.cn/simple
+pip install streamlit-extras -i https://pypi.mirrors.ustc.edu.cn/simple
+pip install streamlit-faker -i https://pypi.mirrors.ustc.edu.cn/simple
+pip install streamlit-image-coordinates -i https://pypi.mirrors.ustc.edu.cn/simple
+pip install streamlit-keyup -i https://pypi.mirrors.ustc.edu.cn/simple
+pip install streamlit-toggle-switch -i https://pypi.mirrors.ustc.edu.cn/simple
+pip install streamlit-vertical-slider -i https://pypi.mirrors.ustc.edu.cn/simple
+```
+
+```
+pip install pypdf
+pip install textacy
+pip install spacy==3.6.0 
+```
+
+
+
+然后进models文件夹，
+```
+cd models
+pip install en_core_web_sm-3.6.0-py3-none-any
+pip install en_core_web_md-3.6.0-py3-none-any
+cd ..
+
+```
 
 6. 准备数据：
 

@@ -18,37 +18,39 @@ from scripts.parsers import ParseJobDesc, ParseResume
 from scripts.ReadPdf import read_single_pdf
 from scripts.similarity.get_score import *
 from scripts.utils import get_filenames_from_dir
+from scripts.frontend.sidebar import show_header, show_sidebar
 
-# Set page configuration
+
+# 设置页面配置
 st.set_page_config(
-    page_title="Resume Matcher",
+    page_title="简历优化助手",
     page_icon="Assets/img/favicon.ico",
     initial_sidebar_state="auto",
     layout="wide",
 )
 
-# Find the current working directory and configuration path
-cwd = find_path("Resume-Matcher")
+# 查找当前工作目录和配置路径
+cwd = find_path("Resume-Refiner")
 config_path = os.path.join(cwd, "scripts", "similarity")
 
-# Check if NLTK punkt data is available, if not, download it
+# 检查NLTK punkt数据是否可用，如果不可用，则下载
 try:
     nltk.data.find("tokenizers/punkt")
 except LookupError:
     nltk.download("punkt")
 
-# Set some visualization parameters using the annotated_text library
+# 使用annotated_text库设置一些可视化参数
 parameters.SHOW_LABEL_SEPARATOR = False
 parameters.BORDER_RADIUS = 3
 parameters.PADDING = "0.5 0.25rem"
 
 
-# Function to set session state variables
+# 定义用于更新会话状态变量的函数
 def update_session_state(key, val):
     st.session_state[key] = val
 
 
-# Function to delete all files in a directory
+# 定义删除目录中所有文件的函数
 def delete_from_dir(filepath: str) -> bool:
     try:
         for file in os.scandir(filepath):
@@ -60,7 +62,7 @@ def delete_from_dir(filepath: str) -> bool:
         return False
 
 
-# Function to create a star-shaped graph visualization
+# 定义创建星形图形可视化的函数
 def create_star_graph(nodes_and_weights, title):
     """
     Create a star-shaped graph visualization.
@@ -199,21 +201,6 @@ def create_annotated_text(
     return ret_annotated_text
 
 
-# Function to read JSON data from a file
-def read_json(filename):
-    """
-    Read JSON data from a file.
-
-    Args:
-        filename (str): The path to the JSON file.
-
-    Returns:
-        dict: The JSON data.
-    """
-    with open(filename) as f:
-        data = json.load(f)
-    return data
-
 
 # Function to tokenize a string
 def tokenize_string(input_string):
@@ -230,11 +217,11 @@ def tokenize_string(input_string):
     return tokens
 
 
-# Cleanup processed resume / job descriptions
+# 清理已处理的简历/职位描述
 delete_from_dir(os.path.join(cwd, "Data", "Processed", "Resumes"))
 delete_from_dir(os.path.join(cwd, "Data", "Processed", "JobDescription"))
 
-# Set default session states for first run
+# 设置默认的会话状态变量以用于首次运行
 if "resumeUploaded" not in st.session_state.keys():
     update_session_state("resumeUploaded", "Pending")
     update_session_state("resumePath", "")
@@ -242,29 +229,14 @@ if "jobDescriptionUploaded" not in st.session_state.keys():
     update_session_state("jobDescriptionUploaded", "Pending")
     update_session_state("jobDescriptionPath", "")
 
-# Display the main title and sub-headers
-st.title(":blue[Resume Matcher]")
-with st.sidebar:
-    st.image("Assets/img/header_image.png")
-    st.subheader(
-        "Free and Open Source ATS to help your resume pass the screening stage."
-    )
-    st.markdown(
-        "Check the website [www.resumematcher.fyi](https://www.resumematcher.fyi/)"
-    )
-    st.markdown(
-        "Give Resume Matcher a ⭐ on [GitHub](https://github.com/srbhr/resume-matcher)"
-    )
-    badge(type="github", name="srbhr/Resume-Matcher")
-    st.markdown("For updates follow me on Twitter.")
-    badge(type="twitter", name="_srbhr_")
-    st.markdown(
-        "If you like the project and would like to further help in development please consider 👇"
-    )
-    badge(type="buymeacoffee", name="srbhr")
+
+show_header()
+show_sidebar()
+print("show_sidebar load over")
 
 st.divider()
 avs.add_vertical_space(1)
+
 
 with st.container():
     resumeCol, jobDescriptionCol = st.columns(2)
@@ -312,6 +284,8 @@ with st.container():
         else:
             update_session_state("jobDescriptionUploaded", "Pending")
             update_session_state("jobDescriptionPath", "")
+
+
 
 with st.spinner("Please wait..."):
     if (

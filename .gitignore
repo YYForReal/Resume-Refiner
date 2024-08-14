@@ -183,3 +183,5 @@ cython_debug/
 
 
 ./bce-embedding-base_v1
+./models/bce-embedding-base_v1
+models/*
