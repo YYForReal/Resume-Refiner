@@ -126,7 +126,7 @@ def get_score(resume_string, job_description_string):
 
     documents: List[str] = [resume_string]
     client = QdrantClient(":memory:")
-    client.set_model("BAAI/bge-base-en")
+    client.set_model("bce-embedding-base_v1")
 
     client.add(
         collection_name="demo_collection",
