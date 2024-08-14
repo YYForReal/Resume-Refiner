@@ -88,11 +88,11 @@ pip install spacy==3.6.0
 
 
 
-然后进models文件夹，
+然后进models文件夹(确保手动下了模型，有文件，也可以看requirements.txt里面的链接)，
 ```
 cd models
-pip install en_core_web_sm-3.6.0-py3-none-any
-pip install en_core_web_md-3.6.0-py3-none-any
+pip install en_core_web_sm-3.6.0-py3-none-any.whl
+pip install en_core_web_md-3.6.0-py3-none-any.whl
 cd ..
 
 ```
